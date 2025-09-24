@@ -23,7 +23,7 @@ class Carrinho
 
     }
 
-    public function getItens()
+    public function getProdutos()
     {
         return $this->Itens;
     }
@@ -41,23 +41,38 @@ class Carrinho
 
     public function adicionarProduto($produto, $quantidade, $valorUnitario): void
     {
-        if (isset($this->Itens[$produto])) {
-            $quantidade = $this->Itens[$produto] += $quantidade;
-        } else {
-            $this->Itens[$produto] = [
+        if ($quantidade > 0) {
+            // procura se o produto já existe no array
+            foreach ($this->Itens as &$item) {
+                if ($item['nome'] === $produto) {
+                    $item['quantidade'] += $quantidade;
+                    $this->calcularTotal();
+                    return;
+                }
+            }
+
+            // se não existir, adiciona um novo
+            $this->Itens[] = [
                 'nome' => $produto,
                 'quantidade' => $quantidade,
                 'valorUnitario' => $valorUnitario
             ];
+
             $this->calcularTotal();
         }
     }
 
+
     public function removerProduto($produto)
     {
-        if (isset($this->Itens[$produto])) {
-            unset($this->Itens[$produto]);
-            $this->calcularTotal();
+        foreach ($this->Itens as $index => $item) {
+            if ($item['nome'] === $produto) {
+                unset($this->Itens[$index]);
+                // reorganiza índices (0,1,2...)
+                $this->Itens = array_values($this->Itens);
+                $this->calcularTotal();
+                return;
+            }
         }
     }
 
@@ -80,15 +95,15 @@ class Carrinho
         }
     }
 
-    public function getProdutos()
-    {
-        echo "PRODUTOS";
-        foreach ($this->Itens as $item) {
-            echo "Nome - " . $item['nome'] . "<br>";
-            echo "Quantidade - " . $item['quantidade'] . "<br>";
-            echo "valorUnitario - " . $item['valorUnitario'] . "<br>";
-            echo "Total produto - " . $item['quantidade'] * $item['valorUnitario'] . "<br>";
-        }
+    // public function getProdutos()
+    // {
+    //     echo "PRODUTOS";
+    //     foreach ($this->Itens as $item) {
+    //         echo "Nome - " . $item['nome'] . "<br>";
+    //         echo "Quantidade - " . $item['quantidade'] . "<br>";
+    //         echo "valorUnitario - " . $item['valorUnitario'] . "<br>";
+    //         echo "Total produto - " . $item['quantidade'] * $item['valorUnitario'] . "<br>";
+    //     }
 
-    }
+    // }
 }
