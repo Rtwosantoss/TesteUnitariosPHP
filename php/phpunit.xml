@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php"
          colors="true"
-         verbose="true"
->
+         beStrictAboutTestsThatDoNotTestAnything="true">
     <testsuites>
-        <testsuite name="Projeto Testes">
-            <directory>tests</directory>
+        <testsuite name="Testes">
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
